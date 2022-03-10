@@ -244,159 +244,171 @@ const paymentInfo = () => {
   })
 }
 
-//===============
+//=================
 //Form Validation
-//===============
+//=================
 
-//Automatic update of error messages as fields are being filled
+// Automatic update of error messages as fields are being filled
 const errorMsg = (valid, parent, value) => {
-  //listen for user typing
-  value.addEventListener('keyup', e => {
-    if (valid.test(value.value) !== true){
-      //Add the 'not-valid' class to the parent containing the empty field
-      value.parentElement.classList.add('not-valid');
+    // Listen for key strockes
+    value.addEventListener('keyup', e => {
+        if(valid.test(value.value) !== true){
+            // Add the 'not-valid' class to the parent containing the empty field
+            value.parentElement.classList.add('not-valid');
 
-      //Display a hint message on how to correct the error
-      parent.lastElementChild.style.display = 'block'
-    }else{
-      //remove the 'not-valid' class from the parent element
-      value.parentElement.classList.remove('not-valid');
+            // Display a hint message on how to correct the error
+            parent.lastElementChild.style.display = 'block'
+        }else{
+            // Remove the 'not-valid' class from the parent element
+            value.parentElement.classList.remove('not-valid');
 
-      //Add the 'valid' class to the parent element
-      value.parentElement.classList.add('valid')
+            // Add the 'valid' class to the parent element
+            value.parentElement.classList.add('valid')
 
-      //Hide the hint message
-      parent.lastElementChild.style.display = 'none'
-    }
-  })
+            // Hide the hint message
+            parent.lastElementChild.style.display = 'none'
+        }
+    })
 }
 
-//Give the email input field the variable 'email'
+// Assign the email input field to the varaiable 'email'
 const email = document.querySelector('#email');
 
-//Error message for email
+// Error Message for email
 errorMsg(/^(\w)+@(\w)+\.com$/, email.parentElement, email)
 
-//error message for userName
+// Error Message for Username
 errorMsg(/^[a-z]+(\s[a-z]+)?$/i, userName.parentElement, userName)
 
-//Give the card number input field the variable 'cardNumber'
+// Assign the card number input field to the variable 'cardNumber'
 const cardNumber = document.querySelector('#cc-num');
 
-//Error message for cardNumber
+// Error Message for CardNumber
 errorMsg(/^\d{13,16}$/, cardNumber.parentElement, cardNumber)
 
-//Give the zip code input field the variable 'zipCode'
+// Assign the zip code input field to the variable 'zipCode'
 const zipCode = document.querySelector('#zip');
 
-//Error message for zipCode
+// Error Message for ZipCode
 errorMsg(/^\d{5}$/, zipCode.parentElement, zipCode)
 
-//Give the cvv input field the variable 'cvv'
+// Assign the cvv input field to the variable 'cvv'
 const cvv = document.querySelector('#cvv');
 
-//Error message for cvv
+// Error Message for Cvv
 errorMsg(/^\d{3}$/, cvv.parentElement, cvv)
 
-//Give the form html element the variable 'form'
+// Assign the form html element to the variable 'form'
 const form = document.querySelector('form');
 
-//Create a function to handle the regex test before submit
+// Helper function handling the regex test before submit
 const input = (inputTest, value, event, field) => {
 
-  //Assign the parent element to the variable 'parent'
-  const parent = field.parentElement;
+     // Assign the parent element to the variable 'parent'
+     const parent = field.parentElement;
 
-  //test the value
-  inputTest.test(value);
+     // Test the value
+     inputTest.test(value);
 
-  if(inputTest.test(value) !==test){
-    //prevent default submit behaviour
-    event.preventDefault();
+     if(inputTest.test(value) !== true ){
+         //Prevent default submit behaviour
+         event.preventDefault();
 
-//==================
-//Custom form errors
-//==================
+         // ===================
+         // Custom form errors
+         // ===================
 
-//Add the 'not-valid'class to the parent containing the empty field
-field.parentElement.classList.add('not-valid');
+        // Add the 'not-valid' class to the parent containing the empty field
+        field.parentElement.classList.add('not-valid');
 
-//Display a hint message on how to correct the error
-parent.lastElementChild.style.display = 'block'
+        // Display a hint message on how to correct the error
+        parent.lastElementChild.style.display = 'block'
 
-}else{
-  //Remove the 'not-valid' class class the parent element
-  field.parentElement.classList.remove('not-valid');
-  //add the 'valid' class class the parent element
-  field.parentElement.classList.add('valid')
-  //Hide the hint message
-  parent.lastElementChild.style.display = 'none'
-  }
+     }else{
+        // Remove the 'not-valid' class from the parent element
+        field.parentElement.classList.remove('not-valid');
+
+        // Add the 'valid' class to the parent element
+        field.parentElement.classList.add('valid')
+
+        // Hide the hint message
+        parent.lastElementChild.style.display = 'none'
+     }
 }
 
-//Give the fieldset containing all the activities to the 'activities' variables
+// Assign the fieldset containing all the activities to the 'activities' variable
 const activities = document.querySelector('#activities');
 
-//Create a function 'activity' to handle a selection from the register for Activities section
+// Create a function 'activity' to handle a selection from the register for activities section
 const activity = (event) => {
 
-  //if count is 0, that also means no activity was selected
-  if(count === 0){
+    // if count is 0, that also means no activity was selected
+    if(count === 0 ){
 
-    //prevent submit default behaviour
-    event.preventDefault();
+        // Prevent submit default behaviour
+        event.preventDefault();
 
-    //Add 'not-valid' class to the activities section
-    activities.classList.add('not-valid')
+        // Add 'not-valid' class to the activities section
+        activities.classList.add('not-valid');
 
-    //Display a hint message on how to correct the error
-    activities.lastElementChild.style.display = 'block'
-  }else{
-    //Remove 'not-valid' class to the activities section
-    activities.classList.remove('not-valid')
-    //Add 'valid' class to the activities section
-    activities.classList.add('valid')
-    //hide the hint message
-    activities.lastElementChild.style.display = 'none'
-  }
-}
+        // Display a hint message on how to correct the error
+        activities.lastElementChild.style.display = 'block'
 
-//create a function to handle credit-card validation
-const creditCard = (event) => {
-  //show options
-  options.forEach(option => {
-    //if any option's value is 'credit-card'
-    if(option.value === 'credit-card'){
-      //if any options attribute is 'selected'
-      if(option.getAttribute('selected')){
-        //cardNumber
-        input(/^\d{13,16}$/, cardNumber.value,event, cardNumber);
-        //zipCode
-        input(/^\d{5}$/, zipCode.value,event, zipCode);
-        //cvv
-        input(/^\d{3}$/, cvv.value,event, cvv);
-      }
+    }else{
+
+        //Remove the 'not-valid' class from the activities section
+        activities.classList.remove('not-valid');
+
+        // Add 'valid' class to the activities section
+        activities.classList.add('valid');
+
+        // Hide the hint message
+        activities.lastElementChild.style.display = 'none'
     }
-  })
 }
 
-//listen for form changes before submit and make sure all fields are properly filled
+
+//Create a function to handle credit-card validation
+const creditCard = (event) => {
+    // Iterate through  the options
+    options.forEach(option => {
+        //if any opotion's value is 'credit-card'
+        if(option.value === 'credit-card'){
+            //if option's attribute is 'selected'
+            if(option.getAttribute('selected') ){
+            //cardNumber
+            input(/^\d{13,16}$/, cardNumber.value, event, cardNumber);
+            // zipCode
+            input(/^\d{5}$/, zipCode.value, event, zipCode);
+            // cvv
+            input(/^\d{3}$/, cvv.value, event, cvv);
+            }
+        }
+    })
+}
+
+// Listen for form changes before submit and make sure all fields are properly filled
 form.addEventListener('submit', e => {
-  //Name
-  input(/^[a-z]+(\s[a-z]+)?$/i, userName.value, e, userName);
-  //email
-  input(/^(\w)+@(\w)+\.com$/, email.value, e, email);
-  //activity selection
-  activity (e)
-  //credit card
-  if(paymentCard.value === 'credit-card'){
-    creditCard(e);
-  }
+    // name
+    input(/^[a-z]+(\s[a-z]+)?$/i, userName.value, e, userName);
+    // email
+    input(/^(\w)+@(\w)+\.com$/, email.value, e, email);
+    // activity selection
+    activity(e)
+    // creditCard
+    if(paymentCard.value === 'credit-card'){
+        creditCard(e);
+    }
+
+
 })
 
-//===============
-//call functions
-//===============
+
+
+
+// ================
+//Call functions
+//=================
 otherJob()
 colorSelect()
 totalCost()
