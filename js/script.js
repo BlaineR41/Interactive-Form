@@ -198,11 +198,11 @@ function validationFail(e) {
     }
 
     /*helper function to validate activities section*/
-    function activitiesValidator () {
-        const activitiesIsValid = total > 0;
-        activitiesIsValid ? validationPass(activitiesBox) : validationFail(activitiesBox);
-        return activitiesIsValid;
-      }
+    function activitiesValidator() {
+       const activitiesIsValid = totalCost > 0;
+       activitiesIsValid ? validationPass(activitiesBox) : validationFail(activitiesBox);
+       return activitiesIsValid;
+   }
 
       /*helper function to validate credit card input*/
       function cardNumberValidator() {
@@ -240,6 +240,8 @@ form.addEventListener('keyup', e => {
         zipCodeValidator();
     } else if (cvv === document.activeElement) {
         cvvValidator();
+    } else if (activities === document.activeElement){
+        activitiesValidator();
     }
 });
 //Checks for the required fields before submission and prevents submission if a field is invalid
