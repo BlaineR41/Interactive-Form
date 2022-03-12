@@ -31,6 +31,12 @@ let totalCost = 0;
 const payment = document.getElementById('payment');
 const paymentOptions = payment.children;
 const creditCard = document.getElementById('credit-card');
+const paypal = document.getElementById('paypal');
+const bitcoin = document.getElementById('bitcoin');
+const cardNumber = document.getElementById('cc-num');
+const zipCode = document.getElementById('zip');
+const cvv = document.getElementById('cvv');
+
 
 /********************/
 /*Basic Info Section*/
@@ -106,6 +112,156 @@ activitiesBox.addEventListener('change', e => {
     }
 });
 
+//adds style to the boxes in the activities field when selected
+for ( let i = 0; i < checkBox.length; i++) {
+    checkBox[i].addEventListener('focus', e =>{
+        e.target.parentElement.classList.add('focus');
+    });
+    checkBox[i].addEventListener('blur', e =>{
+        e.target.parentElement.classList.remove('focus');
+    });
+}
+
 /***********************/
 /*Payment info Section*/
 /**********************/
+
+//Sets the preferred payment method
+const preferredPayment = paymentOptions[1].setAttribute('selected', 'selected');
+
+//hides the other payment options by default
+paypal.style.display = 'none';
+bitcoin.style.display = 'none';
+
+//Displays the correct payment details depending on the payment method selected
+payment.addEventListener('change', e => {
+  for ( let i = 0; i < paymentOptions.length; i++ ) {
+      const target = e.target.value;
+      switch (target) {
+          case 'paypal':
+            creditCard.style.display = 'none';
+            paypal.style.display = 'block';
+            bitcoin.style.display = 'none';
+            break;
+          case 'bitcoin':
+            creditCard.style.display = 'none';
+            paypal.style.display = 'none';
+            bitcoin.style.display = 'block';
+            break;
+          default:
+            creditCard.style.display = 'block';
+            paypal.style.display = 'none';
+            bitcoin.style.display = 'none';
+            break;
+      }
+  }
+});
+
+//Checks if an input is valid and removes the error message upon validation
+function validationPass(e) {
+    const parent = e.parentElement;
+    parent.classList.add('valid');
+    parent.classList.remove('not-valid');
+    parent.lastElementChild.style.display = 'none';
+}
+
+//Checks if an input is invalid and displays the error message
+function validationFail(e) {
+    const parent = e.parentElement;
+    parent.classList.add('not-valid');
+    parent.classList.remove('valid');
+    parent.lastElementChild.style.display = 'block';
+}
+
+    /*helper function to validate name input*/
+    function nameValidator () {
+        const nameValue = userName.value;
+        const nameIsValid = /^\s*?[a-zA-Z]+\s*?[a-zA-Z]*?/.test(nameValue);
+        nameIsValid ? validationPass(userName) : validationFail(userName);
+        return nameIsValid;
+    }
+
+    /*helper function to validate email input*/
+    function emailValidator () {
+        const emailValue = email.value;
+        const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/.test(emailValue);
+        const emailIsEmpty = /^\s*$/.test(email.value);
+        if (emailIsValid){
+            validationPass(email);
+        }else if (emailIsEmpty) {
+            email.nextElementSibling.textContent = 'Email address field cannot be blank';
+            validationFail(email)
+        }else {
+            validationFail(email)
+        }
+        return emailIsValid;
+    }
+
+    /*helper function to validate activities section*/
+    function activitiesValidator () {
+        const activitiesIsValid = total > 0;
+        activitiesIsValid ? validationPass(activitiesBox) : validationFail(activitiesBox);
+        return activitiesIsValid;
+      }
+
+      /*helper function to validate credit card input*/
+      function cardNumberValidator() {
+          const cardNumberValue = cardNumber.value;
+          const cardNumberIsValid = /^\d{13,16}$/.test(cardNumberValue);
+          cardNumberIsValid ? validationPass(cardNumber) : validationFail(cardNumber);
+          return cardNumberIsValid;
+        }
+
+        /*helper function to validate zipCode input*/
+        function zipCodeValidator() {
+          const zipCodeValue = zipCode.value;
+          const zipCodeIsValid = /^\d{5}$/.test(zipCodeValue);
+          zipCodeIsValid ? validationPass(zipCode) : validationFail(zipCode);
+          return zipCodeIsValid;
+        }
+
+          /*helper function to validate cvv input*/
+          function cvvValidator() {
+            const cvvValue = cvv.value;
+            const cvvIsValid = /^\d{3}$/.test(cvvValue);
+            cvvIsValid ? validationPass(cvv) : validationFail(cvv);
+            return cvvIsValid;
+          }
+
+//provides real-time validation to required fileds
+form.addEventListener('keyup', e => {
+    if (userName === document.activeElement) {
+        nameValidator();
+    } else if (email === document.activeElement) {
+        emailValidator();
+    } else if (cardNumber === document.activeElement ) {
+        cardNumberValidator();
+    } else if (zipCode === document.activeElement) {
+        zipCodeValidator();
+    } else if (cvv === document.activeElement) {
+        cvvValidator();
+    }
+});
+//Checks for the required fields before submission and prevents submission if a field is invalid
+form.addEventListener('submit', e => {
+    if (!nameValidator()) {
+        e.preventDefault();
+    }
+    if (!emailValidator()) {
+        e.preventDefault();
+    }
+    if (!activitiesValidator()) {
+        e.preventDefault();
+    }
+    if (payment.value === 'credit-card') {
+        if (!cardNumberValidator()) {
+            e.preventDefault();
+        }
+        if (!zipCodeValidator()) {
+            e.preventDefault();
+        }
+        if (!cvvValidator()) {
+            e.preventDefault();
+        }
+    }
+});
