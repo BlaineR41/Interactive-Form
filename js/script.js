@@ -21,7 +21,17 @@ const color = document.getElementById('color');
 const colorOption = color.children;
 
 /*Register For Activities Section*/
-const activites = document.getElementById('activites')
+const activities = document.getElementById('activities');
+const activitiesBox = document.getElementById('activities-box');
+const checkBox = document.querySelectorAll('[type="checkbox"]');
+const total = document.getElementById('activities-cost');
+let totalCost = 0;
+
+/*Payment info Section*/
+const payment = document.getElementById('payment');
+const paymentOptions = payment.children;
+const creditCard = document.getElementById('credit-card');
+
 /********************/
 /*Basic Info Section*/
 /********************/
@@ -69,3 +79,33 @@ design.addEventListener('change', e => {
 /**********************************/
 /*Register For Activities Section*/
 /********************************/
+
+//Displays and updates the total cost based on the selected activity
+activities.addEventListener('change', e => {
+    const clicked = e.target;
+    const dataCost = +clicked.getAttribute('data-cost');
+    clicked.checked ? totalCost += dataCost : totalCost -= dataCost;
+    total.innerHTML = `Total: $${totalCost}`;
+});
+
+//Prevent Users from selecting activites that occur at the same time
+activitiesBox.addEventListener('change', e => {
+    const clicked = e.target;
+    const clickedType = clicked.getAttribute('data-day-and-time');
+    for ( let i = 0; i < checkBox.length; i++ ) {
+        const checkboxType = checkBox[i].getAttribute('data-day-and-time');
+        if ( checkboxType === clickedType && clicked !== checkBox[i] ) {
+            if (clicked.checked) {
+                checkBox[i].disabled = true;
+                checkBox[i].parentElement.classList.add('disabled');
+            } else {
+                checkBox[i].disabled = false;
+                checkBox[i].parentElement.classList.remove('disabled');
+            }
+        }
+    }
+});
+
+/***********************/
+/*Payment info Section*/
+/**********************/
